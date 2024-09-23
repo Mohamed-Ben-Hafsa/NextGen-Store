@@ -7,7 +7,7 @@
   
       "prestart": "chmod +x node_modules/.bin/js-node",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "chmod +x nodemon BackEnd/server.js",
+    "start": "nodemon BackEnd/server.js",
     "build" :"npm install"
     
    
