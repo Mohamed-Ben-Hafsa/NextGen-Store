@@ -31,6 +31,9 @@ app.use("/api/cart", cartRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "welcom To the Store" });
+});
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
 });
