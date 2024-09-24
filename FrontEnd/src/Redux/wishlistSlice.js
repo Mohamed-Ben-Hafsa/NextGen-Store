@@ -8,7 +8,7 @@ export const getAllWishlist = createAsyncThunk("/wishlist", async () => {
   axios.defaults.withCredentials = true;
   try {
     const { data } = await axios.get(
-      "https://nextgen-store.onrender.com/api/wishlist/"
+      `https://nextgen-store.onrender.com/api/wishlist/`
     );
     return data;
   } catch (error) {
