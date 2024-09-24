@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 4000;
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "https://nextgen-store.netlify.app/"],
+    origin: ["http://localhost:3000", "https://nextgen-store.onrender.com"],
   })
 );
 app.use(express.json());
