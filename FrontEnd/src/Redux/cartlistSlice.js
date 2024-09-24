@@ -8,7 +8,7 @@ export const getAllCartlist = createAsyncThunk("/cartlist", async () => {
   axios.defaults.withCredentials = true;
   try {
     const { data } = await axios.get(
-      "https://nextgen-store.onrender.com/api/cart/"
+      "https://nextgen-store.onrender.com/api/cart"
     );
     return data;
   } catch (error) {
