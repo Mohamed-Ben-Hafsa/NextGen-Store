@@ -7,7 +7,9 @@ import toast from "react-hot-toast";
 export const getAllWishlist = createAsyncThunk("/wishlist", async () => {
   axios.defaults.withCredentials = true;
   try {
-    const { data } = await axios.get("http://localhost:5000/api/wishlist/");
+    const { data } = await axios.get(
+      "https://nextgen-store.onrender.com/api/wishlist/"
+    );
     return data;
   } catch (error) {
     console.log(error);
@@ -21,7 +23,7 @@ export const addProductToWishlist = createAsyncThunk(
     axios.defaults.withCredentials = true;
     try {
       const { data } = await axios.post(
-        `http://localhost:5000/api/wishlist/${id}`
+        `https://nextgen-store.onrender.com/api/wishlist/${id}`
       );
       toast.success("Added to wishlist");
 
@@ -39,7 +41,7 @@ export const deleteProductFromWishlist = createAsyncThunk(
     axios.defaults.withCredentials = true;
     try {
       const { data } = await axios.delete(
-        `http://localhost:5000/api/wishlist/${id}`
+        `https://nextgen-store.onrender.com/api/wishlist/${id}`
       );
       toast.success("Deleted from wishlist");
       return data;

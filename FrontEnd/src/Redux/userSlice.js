@@ -10,7 +10,7 @@ export const signin = createAsyncThunk(
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/users/auth",
+        "https://nextgen-store.onrender.com/api/users/auth",
         user
       );
       dispatch(setCredentials(data));
@@ -28,7 +28,7 @@ export const signUp = createAsyncThunk(
     axios.defaults.withCredentials = true;
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/users",
+        "https://nextgen-store.onrender.com/api/users",
         user
       );
       navigate("/signin");
@@ -43,7 +43,9 @@ export const signUp = createAsyncThunk(
 export const logout = createAsyncThunk("user/logout", async (navigate) => {
   axios.defaults.withCredentials = true;
   try {
-    const { data } = await axios.post("http://localhost:5000/api/users/logout");
+    const { data } = await axios.post(
+      "https://nextgen-store.onrender.com/api/users/logout"
+    );
     navigate("/");
     return data;
   } catch (error) {
@@ -56,7 +58,10 @@ export const updateUser = createAsyncThunk(
   async (user, { dispatch }) => {
     axios.defaults.withCredentials = true;
     try {
-      const { data } = await axios.put("http://localhost:5000/api/users", user);
+      const { data } = await axios.put(
+        "https://nextgen-store.onrender.com/api/users",
+        user
+      );
       toast.success("User Updated");
       dispatch(setCredentials(data));
       navigate("/");
