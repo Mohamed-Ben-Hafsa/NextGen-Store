@@ -46,8 +46,6 @@ function ProductDescription() {
     (product) => product._id.toString() === specificProduct[0]._id
   );
 
-  console.log(existProductfromcartlist);
-
   const togglewishlist = () => {
     if (existProduct) {
       dispatch(deleteProductFromWishlist(specificProduct[0]?._id));
