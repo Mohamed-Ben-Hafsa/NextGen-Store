@@ -15,11 +15,7 @@ function CartButon({ productId }) {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(allCartlistProducts);
-
   const product = allCartlistProducts?.some((p) => p._id === productId);
-
-  console.log(product);
 
   const exist = allCartlistProducts?.some((p) => {
     p._id.toString() === productId;
