@@ -6,6 +6,7 @@ import CategoryRoutes from "./Routes/categoryRoutes.js";
 import cartRoutes from "./Routes/cartRoutes.js";
 import orderRoutes from "./Routes/orderRoutes.js";
 import ProductRoutes from "./Routes/productRoutes.js";
+import wishlistRoutes from "./Routes/wishlistRoutes.js";
 
 import { errorHandler, notFound } from "./Middlewares/errorMiddleware.js";
 import cookieParser from "cookie-parser";
@@ -35,6 +36,7 @@ app.use("/api/category", CategoryRoutes);
 app.use("/api/product", ProductRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
