@@ -7,7 +7,6 @@ import cartRoutes from "./Routes/cartRoutes.js";
 import orderRoutes from "./Routes/orderRoutes.js";
 import ProductRoutes from "./Routes/productRoutes.js";
 import wishlistRoutes from "./Routes/wishlistRoutes.js";
-
 import { errorHandler, notFound } from "./Middlewares/errorMiddleware.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -19,6 +18,7 @@ const PORT = process.env.PORT || 4000;
 app.use(
   cors({
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
     origin: [
       "http://localhost:3000",
       "https://nextgen-store.onrender.com",
