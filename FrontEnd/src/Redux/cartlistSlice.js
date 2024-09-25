@@ -59,16 +59,7 @@ export const deleteProductFromCartlist = createAsyncThunk(
 const cartlistSlice = createSlice({
   name: "cartlist",
   initialState: {},
-  reducers: {
-    setCartlist: (state, action) => {
-      state.cartelist = action.payload;
-      localStorage.setItem("cartlist", JSON.stringify(action.payload));
-    },
-    clearCartlist: (state) => {
-      state.cartlist = null;
-      localStorage.removeItem("cartlist");
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getAllCartlist.pending, (state) => {
       state.loading = true;
@@ -114,5 +105,3 @@ const cartlistSlice = createSlice({
 });
 
 export default cartlistSlice.reducer;
-
-export const { setCartlist, clearCartlist } = cartlistSlice.actions;
