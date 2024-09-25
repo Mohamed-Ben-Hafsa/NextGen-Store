@@ -7,9 +7,7 @@ import toast from "react-hot-toast";
 export const getAllCartlist = createAsyncThunk("/cartlist", async () => {
   axios.defaults.withCredentials = true;
   try {
-    const { data } = await axios.get(
-      `https://nextgen-store.onrender.com/api/cart/`
-    );
+    const { data } = await axios.get("http://localhost:5000/api/cart/");
     return data;
   } catch (error) {
     console.log(error);
@@ -24,9 +22,7 @@ export const addProductToCartlist = createAsyncThunk(
   async (id) => {
     axios.defaults.withCredentials = true;
     try {
-      const { data } = await axios.post(
-        `https://nextgen-store.onrender.com/api/cart/${id}`
-      );
+      const { data } = await axios.post(`http://localhost:5000/api/cart/${id}`);
       toast.success("Added to cartlist");
 
       return data;
@@ -45,7 +41,7 @@ export const deleteProductFromCartlist = createAsyncThunk(
     axios.defaults.withCredentials = true;
     try {
       const { data } = await axios.delete(
-        `https://nextgen-store.onrender.com/api/cart/${id}`
+        `http://localhost:5000/api/cart/${id}`
       );
       toast.success("Deleted from Cartlist");
       return data;
@@ -59,7 +55,16 @@ export const deleteProductFromCartlist = createAsyncThunk(
 const cartlistSlice = createSlice({
   name: "cartlist",
   initialState: {},
-  reducers: {},
+  reducers: {
+    setCartlist: (state, action) => {
+      state.cartelist = action.payload;
+      localStorage.setItem("cartlist", JSON.stringify(action.payload));
+    },
+    clearCartlist: (state) => {
+      state.cartlist = null;
+      localStorage.removeItem("cartlist");
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getAllCartlist.pending, (state) => {
       state.loading = true;

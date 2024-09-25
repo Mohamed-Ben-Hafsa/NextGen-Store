@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { IoReturnDownBackSharp } from "react-icons/io5";
 import { deleteProductFromCartlist } from "../Redux/cartlistSlice.js";
+import { clearCartlist } from "../Redux/cartlistSlice.js";
 
 function Orderpage({ product }) {
   const dispatch = useDispatch();
-  const { allCartlistProducts, deletedFromcartlist } = useSelector(
-    (state) => state.cartlist
-  );
+
   const { userInfo } = useSelector((state) => state.auth);
 
-  console.log(allCartlistProducts);
+  dispatch(clearCartlist());
 
   return (
     <section class="py-24 relative">

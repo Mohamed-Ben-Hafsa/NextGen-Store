@@ -6,7 +6,7 @@ export const getAllCategories = createAsyncThunk("/category", async () => {
   axios.defaults.withCredentials = true;
   try {
     const { data } = await axios.get(
-      "https://nextgen-store.onrender.com/api/category/getAll"
+      "http://localhost:5000/api/category/getAll"
     );
     return data;
   } catch (error) {
