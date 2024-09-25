@@ -114,3 +114,5 @@ const cartlistSlice = createSlice({
 });
 
 export default cartlistSlice.reducer;
+
+export const { setCartlist, clearCartlist } = cartlistSlice.actions;
