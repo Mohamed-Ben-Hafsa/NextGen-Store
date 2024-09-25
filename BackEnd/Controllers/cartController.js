@@ -71,4 +71,24 @@ const deleteProductFromCart = asyncHandler(async (req, res) => {
   }
 });
 
-export { addProductToCart, getAllProductsInCart, deleteProductFromCart };
+const clearCart = asyncHandler(async (req, res) => {
+  try {
+    let cart = await Cart.findOne({ userId: req.user._id });
+    if (cart) {
+      cart.products = [];
+      await cart.save();
+      res.status(200).json({ message: "Cart cleared successfully" });
+    } else {
+      res.status(404).json({ message: "Cart not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+export {
+  addProductToCart,
+  getAllProductsInCart,
+  deleteProductFromCart,
+  clearCart,
+};
