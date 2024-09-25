@@ -4,27 +4,18 @@ import toast from "react-hot-toast";
 
 // Get USER Cart:
 
-export const getAllCartlist = createAsyncThunk(
-  "/cartlist",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("token"); // Assurez-vous que le jeton est stocké localement
-      const { data } = await axios.get(
-        "https://nextgen-store.onrender.com/api/cart/",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return data;
-    } catch (error) {
-      console.log(error);
-      toast.error(error.response?.data?.message || "An error occurred");
-      return rejectWithValue(error.response?.data);
-    }
+export const getAllCartlist = createAsyncThunk("/cartlist", async () => {
+  axios.defaults.withCredentials = true;
+  try {
+    const { data } = await axios.get(
+      "https://nextgen-store.onrender.com/api/cart/"
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    toast.error(error.response.data.message);
   }
-);
+});
 
 // Add To cart
 
