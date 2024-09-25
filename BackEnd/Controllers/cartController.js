@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Product from "../Model/productModel.js";
 import Cart from "../Model/cartModel.js";
+import User from "../Model/userModel.js";
 
 const addProductToCart = asyncHandler(async (req, res) => {
   const { id } = req.params;
