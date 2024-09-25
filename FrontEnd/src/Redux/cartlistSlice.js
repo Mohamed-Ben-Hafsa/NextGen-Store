@@ -56,6 +56,20 @@ export const deleteProductFromCartlist = createAsyncThunk(
   }
 );
 
+export const clearCartlist = createAsyncThunk("/clearCartlist", async (id) => {
+  axios.defaults.withCredentials = true;
+  try {
+    const { data } = await axios.delete(
+      "https://nextgen-store.onrender.com/api/cart"
+    );
+    return data;
+  } catch (error) {
+    console.log(error);
+    toast.error(error.response?.data?.message || "An error occurred");
+    return rejectWithValue(error.response?.data);
+  }
+});
+
 const cartlistSlice = createSlice({
   name: "cartlist",
   initialState: {},
@@ -99,6 +113,20 @@ const cartlistSlice = createSlice({
     });
 
     builder.addCase(deleteProductFromCartlist.rejected, (state) => {
+      state.loading = false;
+    });
+
+    //Clear cart :
+    builder.addCase(clearCartlist.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(clearCartlist.fulfilled, (state, action) => {
+      state.loading = false;
+      state.clearFromcartlist = action.payload;
+    });
+
+    builder.addCase(clearCartlist.rejected, (state) => {
       state.loading = false;
     });
   },

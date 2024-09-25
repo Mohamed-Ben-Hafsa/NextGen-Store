@@ -10,7 +10,9 @@ function Orderpage({ product }) {
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  dispatch(clearCartlist());
+  const handleClearCart = () => {
+    dispatch(clearCartlist());
+  };
 
   return (
     <section class="py-24 relative">
@@ -33,6 +35,7 @@ function Orderpage({ product }) {
 
         <Link to="/cellphones">
           <button
+            onClick={handleClearCart}
             type="button"
             className="bg-yellow-300 flex gap-2 items-center text-white px-6 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
