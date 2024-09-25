@@ -8,6 +8,8 @@ import Header from "../Components/Header.jsx";
 function Watch() {
   const dispatch = useDispatch();
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   const [search, setSearch] = useState("");
 
   const { allProducts } = useSelector((state) => state.product);

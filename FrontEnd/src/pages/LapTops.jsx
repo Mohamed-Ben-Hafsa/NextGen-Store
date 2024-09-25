@@ -10,6 +10,8 @@ function LapTops() {
 
   const [search, setSearch] = useState("");
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   const { allProducts } = useSelector((state) => state.product);
 
   const Laptops = allProducts?.productsList?.filter(

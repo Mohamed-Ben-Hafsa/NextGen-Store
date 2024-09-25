@@ -8,6 +8,8 @@ import Header from "../Components/Header.jsx";
 function Cellphones() {
   const dispatch = useDispatch();
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   const { allCartlistProducts, addedToCartlist, deletedFromcartlist } =
     useSelector((state) => state.cartlist);
 

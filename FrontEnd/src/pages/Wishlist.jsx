@@ -10,6 +10,8 @@ import WishlistCard from "../Components/WishlistCard.jsx";
 function Wishlist() {
   const dispatch = useDispatch();
 
+  const { userInfo } = useSelector((state) => state.auth);
+
   const { allWishlistProducts, deletedFromWishlist } = useSelector(
     (state) => state.wishlist
   );
