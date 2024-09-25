@@ -7,7 +7,7 @@ export const GetFeaturedProduct = createAsyncThunk(
     try {
       axios.defaults.withCredentials = true;
       const { data } = await axios.get(
-        "http://localhost:5000/api/product/getfeatured/8"
+        "https://nextgen-store.onrender.com/api/product/getfeatured/8"
       );
       return data;
     } catch (error) {
@@ -20,7 +20,7 @@ export const getAllProducts = createAsyncThunk("products", async () => {
   try {
     axios.defaults.withCredentials = true;
     const { data } = await axios.get(
-      "http://localhost:5000/api/product/getAll"
+      "https://nextgen-store.onrender.com/api/product/getAll"
     );
     return data;
   } catch (error) {
@@ -35,7 +35,7 @@ export const createProduct = createAsyncThunk(
       axios.defaults.withCredentials = true;
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/product/create",
+        "https://nextgen-store.onrender.com/api/product/create",
         product
       );
       return data;
@@ -49,7 +49,7 @@ export const deleteProduct = createAsyncThunk("product/delete", async (id) => {
   try {
     axios.defaults.withCredentials = true;
     const { data } = await axios.delete(
-      `http://localhost:5000/api/product/delete//${id}`
+      `https://nextgen-store.onrender.com/api/product/delete//${id}`
     );
     return data;
   } catch (error) {
@@ -63,7 +63,7 @@ export const updateProduct = createAsyncThunk(
     try {
       axios.defaults.withCredentials = true;
       const { data } = await axios.put(
-        `http://localhost:5000/api/product/update/${id}`,
+        `https://nextgen-store.onrender.com/api/product/update/${id}`,
         newTask
       );
       return data;
