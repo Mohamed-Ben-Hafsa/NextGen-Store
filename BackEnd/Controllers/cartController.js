@@ -72,17 +72,28 @@ const deleteProductFromCart = asyncHandler(async (req, res) => {
 });
 
 const clearCart = asyncHandler(async (req, res) => {
+  const { id } = req.params;
   try {
-    let cart = await Cart.findOne({ userId: req.user._id });
-    if (cart) {
-      cart.products = [];
-      await cart.save();
-      res.status(200).json({ message: "Cart cleared successfully" });
-    } else {
-      res.status(404).json({ message: "Cart not found" });
+    const product = await Product.find(id);
+    const cart = await Cart.findOne({ userId: req.user._id });
+
+    if (!product) {
+      res.status(404).json({
+        message: "Product is not found",
+      });
     }
+
+    if (!cart) {
+      res.status(500).json({
+        message: "your cart is empty , add products",
+      });
+    }
+
+    await cart.products.pull(id);
+    await cart.save();
+    res.json(cart.products);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json(error.message);
   }
 });
 
