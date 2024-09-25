@@ -23,7 +23,7 @@ import Orderpage from "./pages/Orderpage.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import ProductDescription from "./Components/ProductDescription.jsx";
 import PrivateRoute from "./Components/PrivateRoute.jsx";
-import PrivateRouteLoggedInUser from "./Components/PrivateRouteLoggedInUser.jsx";
+import AdminDashbord from "./pages/AdminDashbord.jsx";
 import { Profile } from "./pages/Profile.jsx";
 
 const router = createBrowserRouter(
@@ -39,11 +39,11 @@ const router = createBrowserRouter(
       <Route path="/cartlist" element={<Cartlist />} />
       <Route path="/orderpage" element={<Orderpage />} />
       <Route path="/aboutUs" element={<AboutUs />} />
-
       <Route path="/productDescription/:id" element={<ProductDescription />} />
 
       <Route path="" element={<PrivateRoute />}>
         <Route path="/profile" element={<Profile />} />
+        <Route path="/adminDashbord" element={<AdminDashbord />} />
       </Route>
     </Route>
   )
