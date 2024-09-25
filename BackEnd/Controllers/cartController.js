@@ -2,18 +2,22 @@ import asyncHandler from "express-async-handler";
 import Product from "../Model/productModel.js";
 import Cart from "../Model/cartModel.js";
 
+// Add Product to Cart
 const addProductToCart = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
   try {
+    // Find the product by ID
     const product = await Product.findById(id);
 
+    // If product not found, return 404
     if (!product) {
-      res.status(404).json({
-        message: "product is not found",
+      return res.status(404).json({
+        message: "Product not found",
       });
-      return;
     }
 
+    // Find the user's cart or create a new one
     let cart = await Cart.findOne({ userId: req.user._id });
     if (!cart) {
       cart = await Cart.create({
@@ -22,51 +26,70 @@ const addProductToCart = asyncHandler(async (req, res) => {
       });
     }
 
-    await cart.products.addToSet(product._id);
+    // Add the product to the cart (ensuring uniqueness with addToSet)
+    cart.products.addToSet(product._id);
     await cart.save();
-    res.status(200).json(cart);
+
+    return res.status(200).json(cart); // Return updated cart
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error.message);
+    console.error(error);
+    return res.status(500).json({ message: error.message });
   }
 });
 
+// Get All Products in Cart
 const getAllProductsInCart = asyncHandler(async (req, res) => {
   try {
+    // Find the user's cart and populate the product details
     const cart = await Cart.findOne({ userId: req.user._id }).populate(
       "products"
     );
 
-    res.json(cart.products);
+    // Check if the cart exists and has products
+    if (!cart || cart.products.length === 0) {
+      return res.status(404).json({ message: "Your cart is empty" });
+    }
+
+    return res.status(200).json(cart.products); // Return products in the cart
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error.message);
+    console.error(error);
+    return res.status(500).json({ message: error.message });
   }
 });
 
+// Delete Product from Cart
 const deleteProductFromCart = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
   try {
+    // Find the product by ID
     const product = await Product.findById(id);
+
+    // If product is not found, return 404
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    // Find the user's cart
     const cart = await Cart.findOne({ userId: req.user._id });
 
-    if (!product) {
-      res.status(404).json({
-        message: "Product is not found",
+    // If cart is not found or empty, return 404
+    if (!cart || cart.products.length === 0) {
+      return res.status(404).json({
+        message: "Your cart is empty",
       });
     }
 
-    if (!cart) {
-      res.status(500).json({
-        message: "your cart is empty , add products",
-      });
-    }
-
-    await cart.products.pull(id);
+    // Remove the product from the cart
+    cart.products.pull(product._id);
     await cart.save();
-    res.json(cart.products);
+
+    return res.status(200).json(cart.products); // Return updated cart
   } catch (error) {
-    res.status(500).json(error.message);
+    console.error(error);
+    return res.status(500).json({ message: error.message });
   }
 });
 
