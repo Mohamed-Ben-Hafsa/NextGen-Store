@@ -1,108 +1,73 @@
+import asyncHandler from "express-async-handler";
 import Product from "../Model/productModel.js";
 import Cart from "../Model/cartModel.js";
 
-const getAllCarts = async (req, res) => {
+const addProductToCart = asyncHandler(async (req, res) => {
+  const { id } = req.params;
   try {
-    const id = req.params.userId;
-    const carts = await Cart.find({ userId: id });
+    const product = await Product.findById(id);
 
-    // Check if carts is not an array or is empty
-    if (!Array.isArray(carts) || carts.length === 0) {
-      throw new Error("You do not have any item in cart");
+    if (!product) {
+      res.status(404).json({
+        message: "product is not found",
+      });
+      return;
     }
 
-    // Assuming carts is an array with at least one cart document
-    // and each cart document has a products array
-    let productPromises = carts[0].products.map((item) =>
-      Product.findById(item.productId)
-    );
-    let products = await Promise.all(productPromises);
-
-    res.status(200).json({ products, cartId: carts[0]._id });
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-};
-
-const deleteProductInCart = async (req, res) => {
-  try {
-    const cartId = req.params.cartId;
-    const productId = req.params.productId;
-    const cart = await Cart.findById(cartId);
-    if (!cart)
-      return res.status(404).json({ msg: "The selected cart doesn't exists" });
-    // Remove the product from the cart's products
-    const updatedProducts = cart.products.filter(
-      (product) => product.productId.toString() !== productId
-    );
-
-    // Check whether products have been updated or not
-    const isArrayEqual =
-      cart.products.length === updatedProducts.length &&
-      cart.products.every((element) => updatedProducts.includes(element));
-    if (isArrayEqual) {
-      return res
-        .status(404)
-        .json({ msg: "Couldnot find the selected product in your cart." });
-    }
-    const updatedCart = await Cart.findByIdAndUpdate(
-      cartId,
-      { $set: { products: updatedProducts } },
-      { new: true }
-    );
-
-    if (!updatedCart) {
-      throw new Error("Could not delete the product from cart");
-    }
-    res.status(200).json({ msg: "Product removed from cart successfully" });
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-};
-const addToCart = async (req, res) => {
-  try {
-    const userId = req.params.userId;
-    const { _id, quantity } = req.body;
-    let cart = await Cart.findOne({ userId: userId });
+    let cart = await Cart.findOne({ userId: req.user._id });
     if (!cart) {
-      cart = new Cart({ userId: userId, products: [] });
+      cart = await Cart.create({
+        userId: req.user._id,
+        products: [],
+      });
     }
-    const existingItemIndex = cart.products.findIndex(
-      (item) => item.productId === _id
+
+    await cart.products.addToSet(product._id);
+    await cart.save();
+    res.status(200).json(cart);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error.message);
+  }
+});
+
+const getAllProductsInCart = asyncHandler(async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ userId: req.user._id }).populate(
+      "products"
     );
 
-    if (existingItemIndex > -1) {
-      cart.products[existingItemIndex].quantity += quantity;
-    } else {
-      cart.products.push({ productId: _id, quantity });
-    }
-    await cart.save();
-    res.status(200).json({ cart, msg: "Added to cart successfully" });
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
+    res.json(cart.products);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error.message);
   }
-};
-const deleteAllProductsFromCart = async (req, res) => {
-  try {
-    const cartId = req.params.cartId;
-    const cart = await Cart.findById(cartId);
-    if (!cart) {
-      return res.status(404).json({ msg: "Couldnot find the cart" });
-    }
-    // set the products array to an empty array
-    cart.products = [];
-    await cart.save();
-    res
-      .status(200)
-      .json({ msg: "Deleted all items from cart successfully", cart });
-  } catch (err) {
-    res.status(500).json({ msg: "Deleted All Items from Cart Successfully" });
-  }
-};
+});
 
-export {
-  getAllCarts,
-  deleteProductInCart,
-  addToCart,
-  deleteAllProductsFromCart,
-};
+const deleteProductFromCart = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findById(id);
+    const cart = await Cart.findOne({ userId: req.user._id });
+
+    if (!product) {
+      res.status(404).json({
+        message: "Product is not found",
+      });
+    }
+
+    if (!cart) {
+      res.status(500).json({
+        message: "your cart is empty , add products",
+      });
+    }
+
+    await cart.products.pull(id);
+    await cart.save();
+    res.json(cart.products);
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+});
+
+export { addProductToCart, getAllProductsInCart, deleteProductFromCart };
