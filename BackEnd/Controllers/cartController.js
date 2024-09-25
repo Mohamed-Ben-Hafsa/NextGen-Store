@@ -77,6 +77,7 @@ const clearCart = asyncHandler(async (req, res) => {
     if (cart) {
       cart.products = [];
       await cart.save();
+      res.json(cart.products);
       res.status(200).json({ message: "Cart cleared successfully" });
     } else {
       res.status(404).json({ message: "Cart not found" });
